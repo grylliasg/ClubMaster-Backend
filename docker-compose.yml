@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: knowledge_postgres
+    environment:
+      POSTGRES_DB: knowledge_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secretpassword
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./Sql-scripts:/docker-entrypoint-initdb.d
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
