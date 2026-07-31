@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface TeamRepository extends JpaRepository<Team,Integer> {
 
     // All CRUD operations (save, findall/byid, deletebyid....) and also:
-    public Team findByName(String name);
+    Team findByName(String name);
+    boolean existsByName(String name);
 }

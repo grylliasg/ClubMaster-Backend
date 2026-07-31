@@ -12,4 +12,6 @@ public interface PlayerRepository extends JpaRepository<Player,Integer> {
     Player findByFirstNameAndLastName(String firstName, String lastName);
 
     List<Player> findByTeamId(Integer teamId);
+
+    boolean existsByFirstNameAndLastName(String fistName, String lastName);
 }
