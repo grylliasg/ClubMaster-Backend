@@ -1,6 +1,8 @@
 package com.clubmaster.clubmaster.service.impl;
 
 import com.clubmaster.clubmaster.entity.Team;
+import com.clubmaster.clubmaster.exception.ResourceAlreadyExistsException;
+import com.clubmaster.clubmaster.exception.ResourceNotFoundException;
 import com.clubmaster.clubmaster.repository.TeamRepository;
 import com.clubmaster.clubmaster.service.TeamService;
 import org.springframework.stereotype.Service;
@@ -22,27 +24,39 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public Team findByName(String name) {
-        return teamRepository.findByName(name);
+        Team team = teamRepository.findByName(name);
+
+        if (team == null) {
+            throw new ResourceNotFoundException("Team not found");
+        }
+
+        return team;
     }
 
     @Override
     public Team createTeam(Team team) {
         if (teamRepository.existsByName(team.getName())) {
-            return null;
+            throw new ResourceAlreadyExistsException("Team already exists");
         }
-        else return teamRepository.save(team);
+
+        return teamRepository.save(team);
     }
 
     @Override
     public Team updateTeam(Team team) {
-        if (teamRepository.existsById(team.getId())) {
-            return teamRepository.save(team);
+        if (!teamRepository.existsById(team.getId())) {
+            throw new ResourceNotFoundException("Team not found");
         }
-        else return null;
+
+        return teamRepository.save(team);
     }
 
     @Override
     public void deleteTeam(Integer id) {
+        if (!teamRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Team not found");
+        }
+
         teamRepository.deleteById(id);
     }
 }
