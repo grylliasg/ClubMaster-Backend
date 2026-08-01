@@ -1,5 +1,6 @@
 package com.clubmaster.clubmaster.controller;
 
+import com.clubmaster.clubmaster.dto.UserDTO;
 import com.clubmaster.clubmaster.entity.User;
 import com.clubmaster.clubmaster.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,7 @@ public class UserController {
     }
 
     @GetMapping("/{username}")
-    public User findByLogin(@PathVariable String username) {
+    public UserDTO findByLogin(@PathVariable String username) {
         return userService.findByLogin(username);
     }
 }
