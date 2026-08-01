@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface PlayerService {
 
-    List<Player> getPlayersByTeam(Team team);
+    List<Player> getPlayersByTeamName(String teamName);
 
     Player getPlayerByName(String firstName, String lastName);
 
