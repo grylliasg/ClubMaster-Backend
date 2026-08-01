@@ -31,8 +31,8 @@ INSERT INTO teams (name, country) VALUES
 ('Real Madrid', 'Spain'),
 ('AEK Athens', 'Greece');
 
-INSERT INTO players (first_name, last_name, position, team_id) VALUES
-('Kylian', 'Mbappe', 'Forward', 1),
-('Thibaut ', 'Courtois', 'Goalkeeper', 1),
-('Harold', 'Moukoudi', 'Defender', 2),
-('Petros', 'Mantalos', 'Midfielder', 2);
+INSERT INTO players (first_name, last_name, position, date_of_birth, team_id) VALUES
+('Kylian', 'Mbappe', 'Forward', '1993-08-01', 1),
+('Thibaut ', 'Courtois', 'Goalkeeper', '2002-02-01', 1),
+('Harold', 'Moukoudi', 'Defender', '2004-08-01', 2),
+('Petros', 'Mantalos', 'Midfielder', '2006-08-01', 2);
