@@ -1,7 +1,8 @@
 package com.clubmaster.clubmaster.service.impl;
 
 import com.clubmaster.clubmaster.entity.Player;
-import com.clubmaster.clubmaster.entity.Team;
+import com.clubmaster.clubmaster.exception.ResourceAlreadyExistsException;
+import com.clubmaster.clubmaster.exception.ResourceNotFoundException;
 import com.clubmaster.clubmaster.repository.PlayerRepository;
 import com.clubmaster.clubmaster.service.PlayerService;
 import org.springframework.stereotype.Service;
@@ -18,20 +19,33 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public List<Player> getPlayersByTeamName(String teamName) {
-        return playerRepository.findByTeamName(teamName);
+        List<Player> players = playerRepository.findByTeamName(teamName);
+
+        if (players.isEmpty()) {
+            throw new ResourceNotFoundException("Players or Team not found");
+        }
+
+        return players;
     }
 
     @Override
     public Player getPlayerByName(String firstName, String lastName) {
-        return playerRepository.findByFirstNameAndLastName(firstName, lastName);
+        Player player = playerRepository.findByFirstNameAndLastName(firstName, lastName);
+
+        if (player == null) {
+            throw new ResourceNotFoundException("Player not found");
+        }
+
+        return  player;
     }
 
     @Override
     public Player createPlayer(Player player){
         if (playerRepository.existsByFirstNameAndLastName(player.getFirstName(), player.getLastName())) {
-            return null;
+            throw new ResourceAlreadyExistsException("Player already exists");
         }
-        else return playerRepository.save(player);
+
+        return playerRepository.save(player);
     }
 
     @Override
@@ -39,11 +53,15 @@ public class PlayerServiceImpl implements PlayerService {
         if (playerRepository.existsById(player.getId())) {
             return playerRepository.save(player);
         }
-        else return null;
+        else throw new ResourceNotFoundException("Player not found");
     }
 
     @Override
-    public void deletePlayerById(Integer id){
+    public void deletePlayerById(Integer id) {
+        if (!playerRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Player not found");
+        }
+
         playerRepository.deleteById(id);
     }
 }
