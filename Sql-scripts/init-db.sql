@@ -25,7 +25,7 @@ ON DELETE CASCADE
 
 INSERT INTO users (login, password) VALUES
 ('admin', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92'),
-('user1', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92');
+('user1', '$2a$10$X9Zo0dPqtKiCksPN2nLkhOb0w88lIXIA6difWuuUG8mqlF/1kba7K');
 
 INSERT INTO teams (name, country) VALUES
 ('Real Madrid', 'Spain'),
