@@ -40,15 +40,4 @@ public class JwtService {
         Date expiration = claims.getExpiration();
         return extractedUsername.equals(username) && !expiration.before(new Date());
     }
-
-    private boolean isTokenExpired(String token) {
-        Date expiration = Jwts.parser()
-                .verifyWith(getSigningKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getExpiration();
-
-        return expiration.before(new Date());
-    }
 }
