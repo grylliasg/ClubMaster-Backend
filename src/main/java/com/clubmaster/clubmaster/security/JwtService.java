@@ -1,5 +1,6 @@
 package com.clubmaster.clubmaster.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
@@ -36,8 +37,10 @@ public class JwtService {
     }
 
     public boolean validateToken(String token, String username) {
-        String extractedUsername = extractUsername(token);
-        return extractedUsername.equals(username) && !isTokenExpired(token);
+        Claims claims = Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(token).getPayload();
+        String extractedUsername = claims.getSubject();
+        Date expiration = claims.getExpiration();
+        return extractedUsername.equals(username) && !expiration.before(new Date());
     }
 
     private boolean isTokenExpired(String token) {
