@@ -44,6 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // 2. Παίρνουμε το token (αφαιρώντας τη λέξη "Bearer ")
         jwt = authHeader.substring(7);
 
+        try {
         // 3. Εξάγουμε το username από το token
         username = jwtService.extractUsername(jwt);
 
@@ -67,6 +68,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // Ενημερώνουμε το Spring Security Context ότι ο χρήστης είναι authenticated
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
+        }
+
+        }
+        catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
         }
 
         // 6. Συνεχίζουμε κανονικά το αίτημα
