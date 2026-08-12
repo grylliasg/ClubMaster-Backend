@@ -2,6 +2,7 @@ package com.clubmaster.clubmaster.controller;
 
 import com.clubmaster.clubmaster.entity.Team;
 import com.clubmaster.clubmaster.service.TeamService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class TeamController {
     }
 
     @PostMapping
-    public Team createTeam(@RequestBody Team team) {
+    public Team createTeam(@Valid @RequestBody Team team) {
         return teamService.createTeam(team);
     }
 
