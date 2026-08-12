@@ -1,5 +1,6 @@
 package com.clubmaster.clubmaster.security;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,7 +34,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
-        final String username;
 
         // 1. Αν δεν υπάρχει Authorization header ή δεν ξεκινάει με "Bearer ", προχωράμε
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -46,16 +46,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             // 3. Εξάγουμε το username από το token
-            username = jwtService.extractUsername(jwt);
+            Claims claims = jwtService.extractClaims(jwt);
 
             // 4. Αν βρέθηκε username και ο χρήστης δεν είναι ήδη συνδεδεμένος
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (claims.getSubject() != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
                 // Φορτώνουμε τον χρήστη από τη βάση μέσω του CustomUserDetailsService
-                UserDetails userDetails = this.customUserDetailsService.loadUserByUsername(username);
+                UserDetails userDetails = this.customUserDetailsService.loadUserByUsername(claims.getSubject());
 
                 // 5. Ελέγχουμε αν το token είναι έγκυρο
-                if (jwtService.validateToken(jwt, userDetails.getUsername())) {
+                if (jwtService.validateToken(claims, userDetails.getUsername())) {
 
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,

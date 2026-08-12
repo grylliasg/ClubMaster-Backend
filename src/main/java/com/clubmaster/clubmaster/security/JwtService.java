@@ -27,17 +27,15 @@ public class JwtService {
                 .compact();
     }
 
-    public String extractUsername(String token) {
+    public Claims extractClaims(String token) {
         return Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
                 .parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
+                .getPayload();
     }
 
-    public boolean validateToken(String token, String username) {
-        Claims claims = Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(token).getPayload();
+    public boolean validateToken(Claims claims, String username) {
         String extractedUsername = claims.getSubject();
         Date expiration = claims.getExpiration();
         return extractedUsername.equals(username) && !expiration.before(new Date());
