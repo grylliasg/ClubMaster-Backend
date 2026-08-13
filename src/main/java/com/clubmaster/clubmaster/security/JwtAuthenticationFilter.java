@@ -1,5 +1,6 @@
 package com.clubmaster.clubmaster.security;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,7 +34,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
-        final String username;
 
         // 1. Αν δεν υπάρχει Authorization header ή δεν ξεκινάει με "Bearer ", προχωράμε
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -45,33 +45,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         jwt = authHeader.substring(7);
 
         try {
-        // 3. Εξάγουμε το username από το token
-        username = jwtService.extractUsername(jwt);
+            // 3. Εξάγουμε το username από το token
+            Claims claims = jwtService.extractClaims(jwt);
 
-        // 4. Αν βρέθηκε username και ο χρήστης δεν είναι ήδη συνδεδεμένος
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            // 4. Αν βρέθηκε username και ο χρήστης δεν είναι ήδη συνδεδεμένος
+            if (claims.getSubject() != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            // Φορτώνουμε τον χρήστη από τη βάση μέσω του CustomUserDetailsService
-            UserDetails userDetails = this.customUserDetailsService.loadUserByUsername(username);
+                // Φορτώνουμε τον χρήστη από τη βάση μέσω του CustomUserDetailsService
+                UserDetails userDetails = this.customUserDetailsService.loadUserByUsername(claims.getSubject());
 
-            // 5. Ελέγχουμε αν το token είναι έγκυρο
-            if (jwtService.validateToken(jwt, userDetails.getUsername())) {
+                // 5. Ελέγχουμε αν το token είναι έγκυρο
+                if (jwtService.validateToken(claims, userDetails.getUsername())) {
 
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
 
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                // Ενημερώνουμε το Spring Security Context ότι ο χρήστης είναι authenticated
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                    // Ενημερώνουμε το Spring Security Context ότι ο χρήστης είναι authenticated
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
             }
-        }
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
