@@ -20,10 +20,14 @@ public class User {
     @Column(nullable = false, length = 255)
     private String password;
 
+    @Column(nullable = false, length = 20)
+    private String role;
+
     protected User() {}
 
-    public User(String login, String password) {
+    public User(String login, String password, String role) {
         this.login = login;
         this.password = password;
+        this.role = role;
     }
 }
