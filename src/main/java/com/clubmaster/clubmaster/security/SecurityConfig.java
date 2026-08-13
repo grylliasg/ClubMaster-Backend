@@ -47,7 +47,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/auth/**", "/error/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 // 2. Προσθέτουμε το JWT φίλτρο μας

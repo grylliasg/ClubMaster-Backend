@@ -1,5 +1,7 @@
 package com.clubmaster.clubmaster.service;
 
+import com.clubmaster.clubmaster.dto.player.CreatePlayerDto;
+import com.clubmaster.clubmaster.dto.player.PlayerResponseDto;
 import com.clubmaster.clubmaster.entity.Player;
 import com.clubmaster.clubmaster.entity.Team;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -12,7 +14,7 @@ public interface PlayerService {
 
     Player getPlayerByName(String firstName, String lastName);
 
-    Player createPlayer(Player player);
+    PlayerResponseDto createPlayer(CreatePlayerDto playerDto);
 
     Player updatePlayer(Player player);
 

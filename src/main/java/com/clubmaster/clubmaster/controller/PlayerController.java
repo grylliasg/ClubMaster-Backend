@@ -1,5 +1,7 @@
 package com.clubmaster.clubmaster.controller;
 
+import com.clubmaster.clubmaster.dto.player.CreatePlayerDto;
+import com.clubmaster.clubmaster.dto.player.PlayerResponseDto;
 import com.clubmaster.clubmaster.entity.Player;
 import com.clubmaster.clubmaster.service.PlayerService;
 import jakarta.validation.Valid;
@@ -28,8 +30,8 @@ public class PlayerController {
     }
 
     @PostMapping
-    public Player createPlayer(@Valid @RequestBody Player player) {
-        return playerService.createPlayer(player);
+    public PlayerResponseDto createPlayer(@Valid @RequestBody CreatePlayerDto playerDto) {
+        return playerService.createPlayer(playerDto);
     }
 
     @PutMapping("/{id}")
