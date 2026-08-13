@@ -1,6 +1,8 @@
 package com.clubmaster.clubmaster.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,15 +18,19 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank
     @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
 
+    @NotBlank
     @Column(name = "last_name", nullable = false, length = 50)
     private String lastName;
 
+    @NotBlank
     @Column(length = 30)
     private String position;
 
+    @NotNull
     @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
 

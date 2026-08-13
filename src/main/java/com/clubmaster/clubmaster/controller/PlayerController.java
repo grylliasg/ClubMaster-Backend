@@ -2,6 +2,7 @@ package com.clubmaster.clubmaster.controller;
 
 import com.clubmaster.clubmaster.entity.Player;
 import com.clubmaster.clubmaster.service.PlayerService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class PlayerController {
     }
 
     @PostMapping
-    public Player createPlayer(@RequestBody Player player) {
+    public Player createPlayer(@Valid @RequestBody Player player) {
         return playerService.createPlayer(player);
     }
 
