@@ -1,6 +1,9 @@
 package com.clubmaster.clubmaster.service.impl;
 
+import com.clubmaster.clubmaster.dto.player.CreatePlayerDto;
+import com.clubmaster.clubmaster.dto.player.PlayerResponseDto;
 import com.clubmaster.clubmaster.entity.Player;
+import com.clubmaster.clubmaster.entity.Team;
 import com.clubmaster.clubmaster.exception.ResourceAlreadyExistsException;
 import com.clubmaster.clubmaster.exception.ResourceNotFoundException;
 import com.clubmaster.clubmaster.repository.PlayerRepository;
@@ -36,24 +39,28 @@ public class PlayerServiceImpl implements PlayerService {
             throw new ResourceNotFoundException("Player not found");
         }
 
-        return  player;
+        return player;
     }
 
     @Override
-    public Player createPlayer(Player player){
-        if (playerRepository.existsByFirstNameAndLastName(player.getFirstName(), player.getLastName())) {
+    public PlayerResponseDto createPlayer(CreatePlayerDto playerDto) {
+
+        if (playerRepository.existsByFirstNameAndLastName(playerDto.getFirstName(), playerDto.getLastName())) {
             throw new ResourceAlreadyExistsException("Player already exists");
         }
 
-        return playerRepository.save(player);
+        Player player = new Player(playerDto.getFirstName(), playerDto.getLastName(), playerDto.getPosition(), playerDto.getDateOfBirth(), playerDto.getTeam());
+
+        Player newplayer = playerRepository.save(player);
+
+        return new PlayerResponseDto(newplayer.getId(), newplayer.getFirstName(), newplayer.getLastName(), newplayer.getPosition(), newplayer.getDateOfBirth(), newplayer.getTeam().getId());
     }
 
     @Override
-    public Player updatePlayer(Player player){
+    public Player updatePlayer(Player player) {
         if (playerRepository.existsById(player.getId())) {
             return playerRepository.save(player);
-        }
-        else throw new ResourceNotFoundException("Player not found");
+        } else throw new ResourceNotFoundException("Player not found");
     }
 
     @Override
