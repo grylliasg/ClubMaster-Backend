@@ -7,6 +7,7 @@ import com.clubmaster.clubmaster.entity.Team;
 import com.clubmaster.clubmaster.exception.ResourceAlreadyExistsException;
 import com.clubmaster.clubmaster.exception.ResourceNotFoundException;
 import com.clubmaster.clubmaster.repository.PlayerRepository;
+import com.clubmaster.clubmaster.repository.TeamRepository;
 import com.clubmaster.clubmaster.service.PlayerService;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +16,11 @@ import java.util.List;
 @Service
 public class PlayerServiceImpl implements PlayerService {
     private final PlayerRepository playerRepository;
+    private final TeamRepository teamRepository;
 
-    public PlayerServiceImpl(PlayerRepository playerRepository) {
+    public PlayerServiceImpl(PlayerRepository playerRepository, TeamRepository teamRepository) {
         this.playerRepository = playerRepository;
+        this.teamRepository = teamRepository;
     }
 
     @Override
@@ -70,5 +73,18 @@ public class PlayerServiceImpl implements PlayerService {
         }
 
         playerRepository.deleteById(id);
+    }
+
+    @Override
+    public void transferPlayer(Integer newTeamId, Player player) {
+        Team newTeam = teamRepository.findById(newTeamId)
+                .orElseThrow(() -> new ResourceNotFoundException("Team not found"));
+
+        Integer playerId = player.getId();
+        player.setId(playerId);
+
+        player.setTeam(newTeam);
+
+        playerRepository.save(player);
     }
 }

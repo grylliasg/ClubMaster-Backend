@@ -19,4 +19,6 @@ public interface PlayerService {
     Player updatePlayer(Player player);
 
     void deletePlayerById(Integer id);
+
+    void transferPlayer(Integer newTeamId, Player player);
 }
