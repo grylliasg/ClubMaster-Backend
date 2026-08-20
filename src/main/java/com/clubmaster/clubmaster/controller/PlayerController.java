@@ -44,4 +44,10 @@ public class PlayerController {
     public void deletePlayer(@PathVariable Integer id) {
         playerService.deletePlayerById(id);
     }
+
+    // Transfer Option
+    @PutMapping("/transfer/{newTeamId}")
+    public void transferPlayer(@PathVariable Integer newTeamId, @RequestBody Player player) {
+        playerService.transferPlayer(newTeamId, player);
+    }
 }
