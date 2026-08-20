@@ -14,6 +14,8 @@ public interface PlayerService {
 
     Player getPlayerByName(String firstName, String lastName);
 
+    Player getPlayerById(Integer id);
+
     PlayerResponseDto createPlayer(CreatePlayerDto playerDto);
 
     Player updatePlayer(Player player);

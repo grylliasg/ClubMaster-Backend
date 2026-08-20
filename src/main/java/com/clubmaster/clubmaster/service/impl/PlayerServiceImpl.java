@@ -47,6 +47,12 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
+    public Player getPlayerById(Integer id) {
+        return playerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Player not found"));
+    }
+
+    @Override
     public PlayerResponseDto createPlayer(CreatePlayerDto playerDto) {
 
         if (playerRepository.existsByFirstNameAndLastName(playerDto.getFirstName(), playerDto.getLastName())) {

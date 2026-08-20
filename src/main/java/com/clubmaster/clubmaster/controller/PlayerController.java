@@ -29,6 +29,11 @@ public class PlayerController {
         return playerService.getPlayerByName(firstName, lastName);
     }
 
+    @GetMapping("/player/{id}")
+    public Player getPlayerById(@PathVariable Integer id) {
+        return playerService.getPlayerById(id);
+    }
+
     @PostMapping
     public PlayerResponseDto createPlayer(@Valid @RequestBody CreatePlayerDto playerDto) {
         return playerService.createPlayer(playerDto);
