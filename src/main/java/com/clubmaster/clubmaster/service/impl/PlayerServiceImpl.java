@@ -12,6 +12,7 @@ import com.clubmaster.clubmaster.service.PlayerService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PlayerServiceImpl implements PlayerService {
@@ -80,8 +81,9 @@ public class PlayerServiceImpl implements PlayerService {
         Team newTeam = teamRepository.findById(newTeamId)
                 .orElseThrow(() -> new ResourceNotFoundException("Team not found"));
 
-        Integer playerId = player.getId();
-        player.setId(playerId);
+        if (newTeam.getId().equals(player.getTeam().getId())) {
+            throw new ResourceAlreadyExistsException("Player cannot be transferred to his current team");
+        }
 
         player.setTeam(newTeam);
 
