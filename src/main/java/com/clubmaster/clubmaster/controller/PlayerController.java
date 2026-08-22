@@ -41,7 +41,6 @@ public class PlayerController {
 
     @PutMapping("/{id}")
     public Player updatePlayer(@PathVariable Integer id, @RequestBody Player player) {
-        player.setId(id);
         return playerService.updatePlayer(player);
     }
 
