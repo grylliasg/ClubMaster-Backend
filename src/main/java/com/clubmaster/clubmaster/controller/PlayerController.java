@@ -51,8 +51,8 @@ public class PlayerController {
     }
 
     // Transfer Option
-    @PutMapping("/transfer/{newTeamId}")
-    public void transferPlayer(@PathVariable Integer newTeamId, @RequestBody Player player) {
-        playerService.transferPlayer(newTeamId, player);
+    @PatchMapping("/{playerId}/team/{newTeamId}")
+    public void transferPlayer(@PathVariable Integer playerId, @PathVariable Integer newTeamId) {
+        playerService.transferPlayer(playerId, newTeamId);
     }
 }

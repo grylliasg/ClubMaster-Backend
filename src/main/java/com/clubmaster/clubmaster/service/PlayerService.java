@@ -22,5 +22,5 @@ public interface PlayerService {
 
     void deletePlayerById(Integer id);
 
-    void transferPlayer(Integer newTeamId, Player player);
+    void transferPlayer(Integer playerId, Integer newTeamId);
 }
