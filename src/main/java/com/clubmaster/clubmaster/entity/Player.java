@@ -30,6 +30,9 @@ public class Player {
     @Column(length = 30)
     private String position;
 
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
     @NotNull
     @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
@@ -40,10 +43,11 @@ public class Player {
 
     protected Player() {}
 
-    public Player(String firstName, String lastName, String position, LocalDate dateOfBirth, Team team) {
+    public Player(String firstName, String lastName, String position, String description, LocalDate dateOfBirth, Team team) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.position = position;
+        this.description = description;
         this.dateOfBirth = dateOfBirth;
         this.team = team;
     }

@@ -49,8 +49,9 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/teams/**", "/players/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+//                        .requestMatchers(HttpMethod.DELETE, "/teams/**", "/players/**").hasRole("ADMIN")
+//                        .anyRequest().authenticated()
+                                .anyRequest().permitAll()
                 )
                 // 2. Προσθέτουμε το JWT φίλτρο μας
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

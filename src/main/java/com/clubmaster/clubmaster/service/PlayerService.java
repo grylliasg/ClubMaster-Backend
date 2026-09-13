@@ -3,14 +3,14 @@ package com.clubmaster.clubmaster.service;
 import com.clubmaster.clubmaster.dto.player.CreatePlayerDto;
 import com.clubmaster.clubmaster.dto.player.PlayerResponseDto;
 import com.clubmaster.clubmaster.entity.Player;
-import com.clubmaster.clubmaster.entity.Team;
-import jakarta.persistence.criteria.CriteriaBuilder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface PlayerService {
 
-    List<Player> getPlayersByTeamName(String teamName);
+    List<Player> getPlayersByTeamId(Integer teamId);
 
     Player getPlayerByName(String firstName, String lastName);
 
@@ -23,4 +23,9 @@ public interface PlayerService {
     void deletePlayerById(Integer id);
 
     void transferPlayer(Integer playerId, Integer newTeamId);
+
+    Page<PlayerResponseDto> getPlayers(
+            String search,
+            Pageable pageable
+    );
 }

@@ -9,6 +9,8 @@ import com.clubmaster.clubmaster.exception.ResourceNotFoundException;
 import com.clubmaster.clubmaster.repository.PlayerRepository;
 import com.clubmaster.clubmaster.repository.TeamRepository;
 import com.clubmaster.clubmaster.service.PlayerService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,14 +26,12 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public List<Player> getPlayersByTeamName(String teamName) {
-        List<Player> players = playerRepository.findByTeamName(teamName);
-
-        if (players.isEmpty()) {
-            throw new ResourceNotFoundException("Players or Team not found");
+    public List<Player> getPlayersByTeamId(Integer teamId) {
+        if (!teamRepository.existsById(teamId)) {
+            throw new ResourceNotFoundException("Team not found");
         }
 
-        return players;
+        return playerRepository.findByTeamId(teamId);
     }
 
     @Override
@@ -58,11 +58,11 @@ public class PlayerServiceImpl implements PlayerService {
             throw new ResourceAlreadyExistsException("Player already exists");
         }
 
-        Player player = new Player(playerDto.getFirstName(), playerDto.getLastName(), playerDto.getPosition(), playerDto.getDateOfBirth(), playerDto.getTeam());
+        Player player = new Player(playerDto.getFirstName(), playerDto.getLastName(), playerDto.getPosition(), playerDto.getDescription(), playerDto.getDateOfBirth(), playerDto.getTeam());
 
         Player newplayer = playerRepository.save(player);
 
-        return new PlayerResponseDto(newplayer.getId(), newplayer.getFirstName(), newplayer.getLastName(), newplayer.getPosition(), newplayer.getDateOfBirth(), newplayer.getTeam().getId());
+        return new PlayerResponseDto(newplayer.getId(), newplayer.getFirstName(), newplayer.getLastName(), newplayer.getPosition(), newplayer.getDescription(), newplayer.getDateOfBirth(), newplayer.getTeam().getId());
     }
 
     @Override
@@ -99,5 +99,34 @@ public class PlayerServiceImpl implements PlayerService {
         player.setTeam(newTeam);
 
         playerRepository.save(player);
+    }
+
+    @Override
+    public Page<PlayerResponseDto> getPlayers(String search, Pageable pageable) {
+
+        Page<Player> players;
+
+        if (search == null || search.isBlank()) {
+            players = playerRepository.findAll(pageable);
+        } else {
+            players = playerRepository
+                    .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
+                            search,
+                            search,
+                            pageable
+                    );
+        }
+
+        return players.map(player ->
+                new PlayerResponseDto(
+                        player.getId(),
+                        player.getFirstName(),
+                        player.getLastName(),
+                        player.getPosition(),
+                        player.getDescription(),
+                        player.getDateOfBirth(),
+                        player.getTeam().getId()
+                )
+        );
     }
 }

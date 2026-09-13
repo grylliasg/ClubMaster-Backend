@@ -2,12 +2,13 @@ package com.clubmaster.clubmaster.controller;
 
 import com.clubmaster.clubmaster.dto.player.CreatePlayerDto;
 import com.clubmaster.clubmaster.dto.player.PlayerResponseDto;
+import com.clubmaster.clubmaster.dto.player.TransferPlayerDto;
 import com.clubmaster.clubmaster.entity.Player;
 import com.clubmaster.clubmaster.service.PlayerService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/players")
@@ -19,17 +20,23 @@ public class PlayerController {
         this.playerService = playerService;
     }
 
-    @GetMapping("/{teamName}")
-    public List<Player> getPlayersByTeamName(@PathVariable String teamName) {
-        return playerService.getPlayersByTeamName(teamName);
-    }
-
-    @GetMapping
-    public Player getPlayerByName(@RequestParam String firstName, @RequestParam String lastName) {
+    @GetMapping("/by-name")
+    public Player getPlayerByName(
+            @RequestParam String firstName,
+            @RequestParam String lastName
+    ) {
         return playerService.getPlayerByName(firstName, lastName);
     }
 
-    @GetMapping("/player/{id}")
+    @GetMapping
+    public Page<PlayerResponseDto> getPlayers(
+            @RequestParam(required = false) String search,
+            Pageable pageable
+    ) {
+        return playerService.getPlayers(search, pageable);
+    }
+
+    @GetMapping("/{id}")
     public Player getPlayerById(@PathVariable Integer id) {
         return playerService.getPlayerById(id);
     }
@@ -41,6 +48,7 @@ public class PlayerController {
 
     @PutMapping("/{id}")
     public Player updatePlayer(@PathVariable Integer id, @RequestBody Player player) {
+        player.setId(id);
         return playerService.updatePlayer(player);
     }
 
@@ -49,9 +57,8 @@ public class PlayerController {
         playerService.deletePlayerById(id);
     }
 
-    // Transfer Option
-    @PatchMapping("/{playerId}/team/{newTeamId}")
-    public void transferPlayer(@PathVariable Integer playerId, @PathVariable Integer newTeamId) {
-        playerService.transferPlayer(playerId, newTeamId);
+    @PatchMapping("/{id}")
+    public void transferPlayer(@PathVariable Integer id, @Valid @RequestBody TransferPlayerDto transferDto) {
+        playerService.transferPlayer(id, transferDto.getTeamId());
     }
 }

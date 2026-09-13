@@ -8,6 +8,8 @@ public interface TeamService {
 
     List<Team> getAllTeams();
 
+    Team findById(Integer id);
+
     Team findByName(String name);
 
     Team createTeam(Team team);

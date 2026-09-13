@@ -23,6 +23,12 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    public Team findById(Integer id) {
+        return teamRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Team not found"));
+    }
+
+    @Override
     public Team findByName(String name) {
         Team team = teamRepository.findByName(name);
 

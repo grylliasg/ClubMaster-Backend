@@ -15,6 +15,7 @@ public class PlayerResponseDto {
     private String firstName;
     private String lastName;
     private String position;
+    private String description;
     private LocalDate dateOfBirth;
     private Integer teamId;
 }

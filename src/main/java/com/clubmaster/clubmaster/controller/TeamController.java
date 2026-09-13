@@ -1,6 +1,8 @@
 package com.clubmaster.clubmaster.controller;
 
+import com.clubmaster.clubmaster.entity.Player;
 import com.clubmaster.clubmaster.entity.Team;
+import com.clubmaster.clubmaster.service.PlayerService;
 import com.clubmaster.clubmaster.service.TeamService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +14,11 @@ import java.util.List;
 public class TeamController {
 
     private final TeamService teamService;
+    private final PlayerService playerService;
 
-    public TeamController(TeamService teamService) {
+    public TeamController(TeamService teamService, PlayerService playerService) {
         this.teamService = teamService;
+        this.playerService = playerService;
     }
 
     @GetMapping
@@ -22,9 +26,19 @@ public class TeamController {
         return teamService.getAllTeams();
     }
 
-    @GetMapping("/{name}")
-    public Team getTeamByName(@PathVariable String name) {
+    @GetMapping(params = "name")
+    public Team getTeamByName(@RequestParam String name) {
         return teamService.findByName(name);
+    }
+
+    @GetMapping("/{id}")
+    public Team getTeamById(@PathVariable Integer id) {
+        return teamService.findById(id);
+    }
+
+    @GetMapping("/{id}/players")
+    public List<Player> getPlayersByTeamId(@PathVariable Integer id) {
+        return playerService.getPlayersByTeamId(id);
     }
 
     @PostMapping

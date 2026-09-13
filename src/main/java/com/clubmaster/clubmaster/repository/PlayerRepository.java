@@ -1,6 +1,8 @@
 package com.clubmaster.clubmaster.repository;
 
 import com.clubmaster.clubmaster.entity.Player;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -11,7 +13,13 @@ public interface PlayerRepository extends JpaRepository<Player,Integer> {
 
     Player findByFirstNameAndLastName(String firstName, String lastName);
 
-    List<Player> findByTeamName(String teamName);
+    List<Player> findByTeamId(Integer teamId);
 
     boolean existsByFirstNameAndLastName(String firstName, String lastName);
+
+    Page<Player> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
+            String firstName,
+            String lastName,
+            Pageable pageable
+    );
 }

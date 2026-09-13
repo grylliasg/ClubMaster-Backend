@@ -23,6 +23,9 @@ public class CreatePlayerDto {
     @NotBlank
     private String position;
 
+    @NotBlank
+    private String description;
+
     @NotNull
     private LocalDate dateOfBirth;
 
