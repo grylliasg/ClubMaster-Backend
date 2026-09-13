@@ -11,7 +11,12 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
-@Table(name = "players")
+@Table(
+        name = "players",
+        indexes = {
+                @Index(name = "idx_players_last_name", columnList = "last_name")
+        }
+)
 public class Player {
 
     @Id

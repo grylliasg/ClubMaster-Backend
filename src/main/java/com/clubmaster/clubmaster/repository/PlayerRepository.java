@@ -17,8 +17,7 @@ public interface PlayerRepository extends JpaRepository<Player,Integer> {
 
     boolean existsByFirstNameAndLastName(String firstName, String lastName);
 
-    Page<Player> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
-            String firstName,
+    Page<Player> findByLastNameIgnoreCase(
             String lastName,
             Pageable pageable
     );

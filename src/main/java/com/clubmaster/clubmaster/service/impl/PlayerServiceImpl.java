@@ -110,8 +110,7 @@ public class PlayerServiceImpl implements PlayerService {
             players = playerRepository.findAll(pageable);
         } else {
             players = playerRepository
-                    .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
-                            search,
+                    .findByLastNameIgnoreCase(
                             search,
                             pageable
                     );
